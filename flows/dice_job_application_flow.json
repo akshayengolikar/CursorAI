@@ -1,0 +1,197 @@
+{
+  "variables": {
+    "package_name": "com.example.dicejobapp",
+    "main_activity": "",
+    "job_keyword": "Data Engineer",
+    "scan_cycles": 150,
+    "search_wait_seconds": 3,
+    "apply_wait_seconds": 2,
+    "scroll_duration_ms": 350
+  },
+  "steps": [
+    {
+      "action": "wait",
+      "timeout": 120
+    },
+    {
+      "action": "launch",
+      "package": "${package_name}",
+      "activity": "${main_activity}"
+    },
+    {
+      "action": "sleep",
+      "seconds": 4
+    },
+    {
+      "action": "tap_text_any",
+      "texts": [
+        "Skip",
+        "Not now",
+        "Maybe later",
+        "Close"
+      ],
+      "contains": true,
+      "optional": true
+    },
+    {
+      "action": "tap_text_any",
+      "texts": [
+        "Search jobs",
+        "Search",
+        "Job title"
+      ],
+      "contains": true
+    },
+    {
+      "action": "input",
+      "text": "${job_keyword}"
+    },
+    {
+      "action": "keyevent",
+      "key": "ENTER"
+    },
+    {
+      "action": "sleep",
+      "seconds": "${search_wait_seconds}"
+    },
+    {
+      "action": "tap_text_any",
+      "texts": [
+        "Filters",
+        "Filter"
+      ],
+      "contains": true,
+      "optional": true
+    },
+    {
+      "action": "sleep",
+      "seconds": 1
+    },
+    {
+      "action": "tap_text_any",
+      "texts": [
+        "Easy Apply",
+        "Easy apply"
+      ],
+      "contains": true,
+      "optional": true
+    },
+    {
+      "action": "tap_text_any",
+      "texts": [
+        "Date posted",
+        "Posted date",
+        "Date",
+        "Posted"
+      ],
+      "contains": true,
+      "optional": true
+    },
+    {
+      "action": "tap_text_any",
+      "texts": [
+        "Today",
+        "Past 24 hours"
+      ],
+      "contains": true,
+      "optional": true
+    },
+    {
+      "action": "tap_text_any",
+      "texts": [
+        "Show results",
+        "Apply filters",
+        "Done",
+        "View jobs",
+        "Apply"
+      ],
+      "contains": true,
+      "optional": true
+    },
+    {
+      "action": "sleep",
+      "seconds": "${search_wait_seconds}"
+    },
+    {
+      "action": "repeat",
+      "times": "${scan_cycles}",
+      "steps": [
+        {
+          "action": "if_tap_text_any",
+          "texts": [
+            "Easy Apply",
+            "Apply now",
+            "Quick Apply",
+            "Apply"
+          ],
+          "contains": true,
+          "then_steps": [
+            {
+              "action": "sleep",
+              "seconds": "${apply_wait_seconds}"
+            },
+            {
+              "action": "tap_text_any",
+              "texts": [
+                "Continue",
+                "Next",
+                "Review"
+              ],
+              "contains": true,
+              "optional": true
+            },
+            {
+              "action": "tap_text_any",
+              "texts": [
+                "Submit",
+                "Send application",
+                "Review and submit",
+                "Submit application"
+              ],
+              "contains": true,
+              "optional": true
+            },
+            {
+              "action": "sleep",
+              "seconds": "${apply_wait_seconds}"
+            },
+            {
+              "action": "screenshot",
+              "output": "artifacts/dice_job_apply_${index}.png"
+            },
+            {
+              "action": "keyevent",
+              "key": "BACK"
+            },
+            {
+              "action": "sleep",
+              "seconds": 1
+            }
+          ],
+          "else_steps": [
+            {
+              "action": "sleep",
+              "seconds": 0.5
+            }
+          ]
+        },
+        {
+          "action": "swipe",
+          "x1": 540,
+          "y1": 1800,
+          "x2": 540,
+          "y2": 700,
+          "duration_ms": "${scroll_duration_ms}"
+        },
+        {
+          "action": "sleep",
+          "seconds": 1
+        }
+      ]
+    },
+    {
+      "action": "dump_ui",
+      "output": "artifacts/dice_job_last_ui.xml"
+    }
+  ]
+}

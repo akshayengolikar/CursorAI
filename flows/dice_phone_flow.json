@@ -1,0 +1,52 @@
+{
+  "variables": {
+    "package_name": "com.example.diceapp",
+    "main_activity": "",
+    "roll_count": 10,
+    "delay_seconds": 1.0
+  },
+  "steps": [
+    {
+      "action": "wait",
+      "timeout": 120
+    },
+    {
+      "action": "launch",
+      "package": "${package_name}",
+      "activity": "${main_activity}"
+    },
+    {
+      "action": "sleep",
+      "seconds": 2
+    },
+    {
+      "action": "repeat",
+      "times": "${roll_count}",
+      "steps": [
+        {
+          "action": "tap_text_any",
+          "texts": [
+            "Roll",
+            "ROLL",
+            "Roll Dice",
+            "Throw",
+            "Shake"
+          ],
+          "contains": true
+        },
+        {
+          "action": "sleep",
+          "seconds": "${delay_seconds}"
+        },
+        {
+          "action": "screenshot",
+          "output": "artifacts/dice_roll_${index}.png"
+        }
+      ]
+    },
+    {
+      "action": "dump_ui",
+      "output": "artifacts/dice_last_ui.xml"
+    }
+  ]
+}
