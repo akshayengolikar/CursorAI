@@ -126,8 +126,12 @@ A dedicated template for the DICE job app is available:
 
 - `flows/dice_job_application_flow.json`
 
-This flow is aimed at opening the job app, searching for roles, and attempting
-"Easy Apply"/"Apply" actions repeatedly while saving screenshots.
+This flow is preconfigured to:
+
+- search for **Data Engineer**
+- apply filters for **Easy Apply** and **Today / Past 24 hours**
+- iterate through listings and apply where possible
+- save screenshots for each apply attempt
 
 ### 1) Find the installed DICE job app package
 
@@ -147,9 +151,10 @@ In `flows/dice_job_application_flow.json`, set:
 
 - `package_name` (required)
 - `main_activity` (optional; keep empty to launch by package)
-- `job_keyword`
-- `location`
-- `max_applications`
+- `job_keyword` (defaults to `Data Engineer`)
+- `scan_cycles` (how many listings to scan for apply actions)
+- `search_wait_seconds`
+- `apply_wait_seconds`
 
 ### 3) Run the DICE job application flow
 
@@ -178,6 +183,7 @@ Result artifacts are stored in `artifacts/`:
 - `tap_text`
 - `tap_text_any` (tries text candidates until one matches)
 - `repeat` (executes nested `steps` N times; exposes `${index}`)
+- `if_tap_text_any` (conditionally executes `then_steps` or `else_steps`)
 
 `tap_text` and `tap_text_any` also support:
 

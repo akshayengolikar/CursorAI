@@ -2,11 +2,11 @@
   "variables": {
     "package_name": "com.example.dicejobapp",
     "main_activity": "",
-    "job_keyword": "Android Automation Engineer",
-    "location": "Remote",
-    "max_applications": 3,
+    "job_keyword": "Data Engineer",
+    "scan_cycles": 150,
     "search_wait_seconds": 3,
-    "apply_wait_seconds": 2
+    "apply_wait_seconds": 2,
+    "scroll_duration_ms": 350
   },
   "steps": [
     {
@@ -57,19 +57,56 @@
     {
       "action": "tap_text_any",
       "texts": [
-        "Location",
-        "Where"
+        "Filters",
+        "Filter"
       ],
       "contains": true,
       "optional": true
     },
     {
-      "action": "input",
-      "text": "${location}"
+      "action": "sleep",
+      "seconds": 1
     },
     {
-      "action": "keyevent",
-      "key": "ENTER"
+      "action": "tap_text_any",
+      "texts": [
+        "Easy Apply",
+        "Easy apply"
+      ],
+      "contains": true,
+      "optional": true
+    },
+    {
+      "action": "tap_text_any",
+      "texts": [
+        "Date posted",
+        "Posted date",
+        "Date",
+        "Posted"
+      ],
+      "contains": true,
+      "optional": true
+    },
+    {
+      "action": "tap_text_any",
+      "texts": [
+        "Today",
+        "Past 24 hours"
+      ],
+      "contains": true,
+      "optional": true
+    },
+    {
+      "action": "tap_text_any",
+      "texts": [
+        "Show results",
+        "Apply filters",
+        "Done",
+        "View jobs",
+        "Apply"
+      ],
+      "contains": true,
+      "optional": true
     },
     {
       "action": "sleep",
@@ -77,48 +114,66 @@
     },
     {
       "action": "repeat",
-      "times": "${max_applications}",
+      "times": "${scan_cycles}",
       "steps": [
         {
-          "action": "tap_text_any",
+          "action": "if_tap_text_any",
           "texts": [
             "Easy Apply",
             "Apply now",
             "Quick Apply",
             "Apply"
           ],
-          "contains": true
-        },
-        {
-          "action": "sleep",
-          "seconds": "${apply_wait_seconds}"
-        },
-        {
-          "action": "tap_text_any",
-          "texts": [
-            "Submit",
-            "Send application",
-            "Continue",
-            "Review and submit"
-          ],
           "contains": true,
-          "optional": true
-        },
-        {
-          "action": "sleep",
-          "seconds": "${apply_wait_seconds}"
-        },
-        {
-          "action": "screenshot",
-          "output": "artifacts/dice_job_apply_${index}.png"
-        },
-        {
-          "action": "keyevent",
-          "key": "BACK"
-        },
-        {
-          "action": "sleep",
-          "seconds": 1
+          "then_steps": [
+            {
+              "action": "sleep",
+              "seconds": "${apply_wait_seconds}"
+            },
+            {
+              "action": "tap_text_any",
+              "texts": [
+                "Continue",
+                "Next",
+                "Review"
+              ],
+              "contains": true,
+              "optional": true
+            },
+            {
+              "action": "tap_text_any",
+              "texts": [
+                "Submit",
+                "Send application",
+                "Review and submit",
+                "Submit application"
+              ],
+              "contains": true,
+              "optional": true
+            },
+            {
+              "action": "sleep",
+              "seconds": "${apply_wait_seconds}"
+            },
+            {
+              "action": "screenshot",
+              "output": "artifacts/dice_job_apply_${index}.png"
+            },
+            {
+              "action": "keyevent",
+              "key": "BACK"
+            },
+            {
+              "action": "sleep",
+              "seconds": 1
+            }
+          ],
+          "else_steps": [
+            {
+              "action": "sleep",
+              "seconds": 0.5
+            }
+          ]
         },
         {
           "action": "swipe",
@@ -126,7 +181,11 @@
           "y1": 1800,
           "x2": 540,
           "y2": 700,
-          "duration_ms": 350
+          "duration_ms": "${scroll_duration_ms}"
+        },
+        {
+          "action": "sleep",
+          "seconds": 1
         }
       ]
     },

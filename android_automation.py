@@ -330,6 +330,49 @@ def execute_flow_steps(
                 nested_variables = dict(variables)
                 nested_variables["index"] = repeat_index
                 execute_flow_steps(nested_steps, automator, nested_variables, depth=depth + 1)
+        elif action == "if_tap_text_any":
+            texts = step.get("texts")
+            if not isinstance(texts, list) or not texts:
+                msg = f"Step #{index} action=if_tap_text_any requires non-empty 'texts' list."
+                raise ValueError(msg)
+            then_steps = step.get("then_steps")
+            if not isinstance(then_steps, list) or not then_steps:
+                msg = f"Step #{index} action=if_tap_text_any requires non-empty 'then_steps' list."
+                raise ValueError(msg)
+            else_steps = step.get("else_steps", [])
+            if else_steps is None:
+                else_steps = []
+            if not isinstance(else_steps, list):
+                msg = f"Step #{index} action=if_tap_text_any requires list field 'else_steps' when provided."
+                raise ValueError(msg)
+
+            contains = as_bool(step.get("contains", False))
+            occurrence = int(step.get("occurrence", 1))
+            matched = False
+            matched_text = ""
+            for candidate in texts:
+                candidate_text = str(candidate)
+                try:
+                    x, y = automator.tap_text(
+                        text=candidate_text,
+                        contains=contains,
+                        occurrence=occurrence,
+                    )
+                    matched = True
+                    matched_text = candidate_text
+                    print(f"{indent}[flow] conditional match {candidate_text!r} at {x},{y}")
+                    break
+                except ADBError:
+                    continue
+
+            branch_variables = dict(variables)
+            if matched:
+                branch_variables["matched_text"] = matched_text
+                execute_flow_steps(then_steps, automator, branch_variables, depth=depth + 1)
+            elif else_steps:
+                execute_flow_steps(else_steps, automator, branch_variables, depth=depth + 1)
+            else:
+                print(f"{indent}[flow] conditional no match; no else_steps")
         elif action == "tap_text_any":
             texts = step.get("texts")
             if not isinstance(texts, list) or not texts:

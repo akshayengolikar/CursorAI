@@ -189,6 +189,48 @@ class FlowExecutionTests(unittest.TestCase):
 
         self.assertEqual(automator.taps, [])
 
+    def test_run_flow_if_tap_text_any_executes_then_branch(self) -> None:
+        payload = {
+            "steps": [
+                {
+                    "action": "if_tap_text_any",
+                    "texts": ["Login"],
+                    "then_steps": [{"action": "screenshot", "output": "artifacts/then.png"}],
+                    "else_steps": [{"action": "screenshot", "output": "artifacts/else.png"}],
+                }
+            ]
+        }
+        automator = self.FlowAutomator()
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            flow_path = Path(tmp_dir) / "dice_flow.json"
+            flow_path.write_text(json.dumps(payload), encoding="utf-8")
+            run_flow(flow_path, automator)
+
+        self.assertEqual(automator.taps, [(300, 650)])
+        self.assertEqual(automator.screenshots, ["artifacts/then.png"])
+
+    def test_run_flow_if_tap_text_any_executes_else_branch(self) -> None:
+        payload = {
+            "steps": [
+                {
+                    "action": "if_tap_text_any",
+                    "texts": ["Missing"],
+                    "then_steps": [{"action": "screenshot", "output": "artifacts/then.png"}],
+                    "else_steps": [{"action": "screenshot", "output": "artifacts/else.png"}],
+                }
+            ]
+        }
+        automator = self.FlowAutomator()
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            flow_path = Path(tmp_dir) / "dice_flow.json"
+            flow_path.write_text(json.dumps(payload), encoding="utf-8")
+            run_flow(flow_path, automator)
+
+        self.assertEqual(automator.taps, [])
+        self.assertEqual(automator.screenshots, ["artifacts/else.png"])
+
 
 if __name__ == "__main__":
     unittest.main()
