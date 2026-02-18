@@ -337,6 +337,7 @@ def execute_flow_steps(
                 raise ValueError(msg)
             contains = as_bool(step.get("contains", False))
             occurrence = int(step.get("occurrence", 1))
+            optional = as_bool(step.get("optional", False))
             last_error: ADBError | None = None
             for candidate in texts:
                 candidate_text = str(candidate)
@@ -354,7 +355,10 @@ def execute_flow_steps(
                 msg = f"None of tap_text_any candidates matched: {texts!r}."
                 if last_error:
                     msg = f"{msg}\nLast error: {last_error}"
-                raise ADBError(msg)
+                if optional:
+                    print(f"{indent}[flow] optional step skipped: {msg}")
+                else:
+                    raise ADBError(msg)
         elif action == "shell":
             command = step.get("command")
             if not isinstance(command, str):
@@ -366,12 +370,19 @@ def execute_flow_steps(
         elif action == "dump_ui":
             automator.dump_ui(str(step["output"]))
         elif action == "tap_text":
-            x, y = automator.tap_text(
-                text=str(step["text"]),
-                contains=as_bool(step.get("contains", False)),
-                occurrence=int(step.get("occurrence", 1)),
-            )
-            print(f"{indent}[flow] tapped {x},{y}")
+            optional = as_bool(step.get("optional", False))
+            try:
+                x, y = automator.tap_text(
+                    text=str(step["text"]),
+                    contains=as_bool(step.get("contains", False)),
+                    occurrence=int(step.get("occurrence", 1)),
+                )
+                print(f"{indent}[flow] tapped {x},{y}")
+            except ADBError:
+                if optional:
+                    print(f"{indent}[flow] optional tap_text skipped for {step['text']!r}")
+                else:
+                    raise
         else:
             msg = f"Unsupported action {action!r} in step #{index}."
             raise ValueError(msg)

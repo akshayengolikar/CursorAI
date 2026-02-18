@@ -78,7 +78,7 @@ Update these values for your app:
 - `main_activity`
 - any login or navigation steps
 
-## Dice Application Automation (Phone)
+## Dice Game Application Automation (Phone)
 
 A ready dice-app template is included at:
 
@@ -120,6 +120,48 @@ Artifacts are saved in `artifacts/`:
 - `dice_roll_1.png`, `dice_roll_2.png`, ...
 - `dice_last_ui.xml`
 
+## DICE Job Application App Automation (Phone)
+
+A dedicated template for the DICE job app is available:
+
+- `flows/dice_job_application_flow.json`
+
+This flow is aimed at opening the job app, searching for roles, and attempting
+"Easy Apply"/"Apply" actions repeatedly while saving screenshots.
+
+### 1) Find the installed DICE job app package
+
+```bash
+adb shell pm list packages | rg -i "dice|job"
+```
+
+If you need to resolve launcher activity:
+
+```bash
+adb shell cmd package resolve-activity --brief com.your.dice.package
+```
+
+### 2) Edit flow variables
+
+In `flows/dice_job_application_flow.json`, set:
+
+- `package_name` (required)
+- `main_activity` (optional; keep empty to launch by package)
+- `job_keyword`
+- `location`
+- `max_applications`
+
+### 3) Run the DICE job application flow
+
+```bash
+python3 android_automation.py run-flow --flow flows/dice_job_application_flow.json
+```
+
+Result artifacts are stored in `artifacts/`:
+
+- `dice_job_apply_1.png`, `dice_job_apply_2.png`, ...
+- `dice_job_last_ui.xml`
+
 ## Supported Flow Actions
 
 - `wait`
@@ -136,6 +178,10 @@ Artifacts are saved in `artifacts/`:
 - `tap_text`
 - `tap_text_any` (tries text candidates until one matches)
 - `repeat` (executes nested `steps` N times; exposes `${index}`)
+
+`tap_text` and `tap_text_any` also support:
+
+- `optional: true` (skip the step instead of failing if no match)
 
 ## Troubleshooting
 

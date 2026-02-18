@@ -167,6 +167,28 @@ class FlowExecutionTests(unittest.TestCase):
             with self.assertRaises(ADBError):
                 run_flow(flow_path, automator)
 
+    def test_run_flow_tap_text_any_optional_skips_when_no_match(self) -> None:
+        payload = {"steps": [{"action": "tap_text_any", "texts": ["Missing"], "optional": True}]}
+        automator = self.FlowAutomator()
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            flow_path = Path(tmp_dir) / "dice_flow.json"
+            flow_path.write_text(json.dumps(payload), encoding="utf-8")
+            run_flow(flow_path, automator)
+
+        self.assertEqual(automator.taps, [])
+
+    def test_run_flow_tap_text_optional_skips_when_no_match(self) -> None:
+        payload = {"steps": [{"action": "tap_text", "text": "Missing", "optional": True}]}
+        automator = self.FlowAutomator()
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            flow_path = Path(tmp_dir) / "dice_flow.json"
+            flow_path.write_text(json.dumps(payload), encoding="utf-8")
+            run_flow(flow_path, automator)
+
+        self.assertEqual(automator.taps, [])
+
 
 if __name__ == "__main__":
     unittest.main()
