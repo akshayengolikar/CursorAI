@@ -1,0 +1,56 @@
+{
+  "variables": {
+    "apk_path": "app/build/outputs/apk/debug/app-debug.apk",
+    "package_name": "com.example.myapp",
+    "main_activity": ".MainActivity"
+  },
+  "steps": [
+    {
+      "action": "wait",
+      "timeout": 120
+    },
+    {
+      "action": "install",
+      "apk": "${apk_path}",
+      "replace": true
+    },
+    {
+      "action": "launch",
+      "package": "${package_name}",
+      "activity": "${main_activity}"
+    },
+    {
+      "action": "sleep",
+      "seconds": 2
+    },
+    {
+      "action": "tap_text",
+      "text": "Login",
+      "contains": false
+    },
+    {
+      "action": "input",
+      "text": "qa.user@example.com"
+    },
+    {
+      "action": "keyevent",
+      "key": "TAB"
+    },
+    {
+      "action": "input",
+      "text": "SuperSecret123!"
+    },
+    {
+      "action": "keyevent",
+      "key": "ENTER"
+    },
+    {
+      "action": "screenshot",
+      "output": "artifacts/post_login.png"
+    },
+    {
+      "action": "dump_ui",
+      "output": "artifacts/post_login_ui.xml"
+    }
+  ]
+}
