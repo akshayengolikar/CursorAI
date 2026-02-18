@@ -1,6 +1,16 @@
+import json
+import tempfile
 import unittest
+from pathlib import Path
 
-from android_automation import ADBError, AndroidAutomator, interpolate_variables, parse_bounds
+from android_automation import (
+    ADBError,
+    AndroidAutomator,
+    as_bool,
+    interpolate_variables,
+    parse_bounds,
+    run_flow,
+)
 
 
 SAMPLE_XML = """<?xml version="1.0" encoding="UTF-8"?>
@@ -102,6 +112,60 @@ class TapTextTests(unittest.TestCase):
         automator = FakeAutomator()
         with self.assertRaises(ADBError):
             automator.tap_text("Not Present")
+
+
+class BoolParsingTests(unittest.TestCase):
+    def test_as_bool_handles_string_values(self) -> None:
+        self.assertTrue(as_bool("true"))
+        self.assertTrue(as_bool("YES"))
+        self.assertFalse(as_bool("false"))
+        self.assertFalse(as_bool("0"))
+
+
+class FlowExecutionTests(unittest.TestCase):
+    class FlowAutomator(FakeAutomator):
+        def __init__(self):
+            super().__init__()
+            self.screenshots = []
+
+        def screenshot(self, output_path: str) -> None:
+            self.screenshots.append(output_path)
+
+    def test_run_flow_repeat_and_tap_text_any(self) -> None:
+        payload = {
+            "steps": [
+                {
+                    "action": "repeat",
+                    "times": 2,
+                    "steps": [
+                        {"action": "tap_text_any", "texts": ["Missing", "Login"]},
+                        {"action": "screenshot", "output": "artifacts/dice_roll_${index}.png"},
+                    ],
+                }
+            ]
+        }
+        automator = self.FlowAutomator()
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            flow_path = Path(tmp_dir) / "dice_flow.json"
+            flow_path.write_text(json.dumps(payload), encoding="utf-8")
+            run_flow(flow_path, automator)
+
+        self.assertEqual(automator.taps, [(300, 650), (300, 650)])
+        self.assertEqual(
+            automator.screenshots,
+            ["artifacts/dice_roll_1.png", "artifacts/dice_roll_2.png"],
+        )
+
+    def test_run_flow_tap_text_any_raises_when_no_match(self) -> None:
+        payload = {"steps": [{"action": "tap_text_any", "texts": ["Missing"]}]}
+        automator = self.FlowAutomator()
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            flow_path = Path(tmp_dir) / "dice_flow.json"
+            flow_path.write_text(json.dumps(payload), encoding="utf-8")
+            with self.assertRaises(ADBError):
+                run_flow(flow_path, automator)
 
 
 if __name__ == "__main__":

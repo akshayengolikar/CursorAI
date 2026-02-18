@@ -78,6 +78,48 @@ Update these values for your app:
 - `main_activity`
 - any login or navigation steps
 
+## Dice Application Automation (Phone)
+
+A ready dice-app template is included at:
+
+- `flows/dice_phone_flow.json`
+
+It launches a dice app and performs repeated rolls, trying common button labels
+(`Roll`, `ROLL`, `Roll Dice`, `Throw`, `Shake`) while saving screenshots for
+each roll.
+
+### 1) Find your dice app package on phone
+
+```bash
+adb shell pm list packages | rg -i dice
+```
+
+Optional (if you need launcher activity):
+
+```bash
+adb shell cmd package resolve-activity --brief com.your.dice.package
+```
+
+### 2) Update the flow file
+
+Edit `flows/dice_phone_flow.json`:
+
+- `package_name` -> your installed dice app package
+- `main_activity` -> optional (leave empty to launch by package only)
+- `roll_count` -> number of rolls to execute
+- `delay_seconds` -> delay between rolls
+
+### 3) Run automation
+
+```bash
+python3 android_automation.py run-flow --flow flows/dice_phone_flow.json
+```
+
+Artifacts are saved in `artifacts/`:
+
+- `dice_roll_1.png`, `dice_roll_2.png`, ...
+- `dice_last_ui.xml`
+
 ## Supported Flow Actions
 
 - `wait`
@@ -92,6 +134,8 @@ Update these values for your app:
 - `screenshot`
 - `dump_ui`
 - `tap_text`
+- `tap_text_any` (tries text candidates until one matches)
+- `repeat` (executes nested `steps` N times; exposes `${index}`)
 
 ## Troubleshooting
 

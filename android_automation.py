@@ -62,6 +62,19 @@ def ensure_parent_directory(path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
 
 
+def as_bool(value: Any) -> bool:
+    """Convert common bool-like values into a bool."""
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"1", "true", "yes", "y", "on"}:
+            return True
+        if normalized in {"0", "false", "no", "n", "off", ""}:
+            return False
+    return bool(value)
+
+
 class AndroidAutomator:
     """Executes adb commands and higher-level automation actions."""
 
@@ -258,6 +271,18 @@ def run_flow(flow_path: Path, automator: AndroidAutomator) -> None:
         msg = "Flow file must include a non-empty 'steps' list."
         raise ValueError(msg)
 
+    execute_flow_steps(steps, automator, variables)
+
+
+def execute_flow_steps(
+    steps: list[Any],
+    automator: AndroidAutomator,
+    variables: dict[str, Any],
+    *,
+    depth: int = 0,
+) -> None:
+    """Execute a list of flow steps, supporting nested repeat blocks."""
+    indent = "  " * depth
     for index, raw_step in enumerate(steps, start=1):
         if not isinstance(raw_step, dict):
             msg = f"Step #{index} must be an object."
@@ -267,12 +292,12 @@ def run_flow(flow_path: Path, automator: AndroidAutomator) -> None:
         if not isinstance(action, str):
             msg = f"Step #{index} is missing a valid string 'action'."
             raise ValueError(msg)
-        print(f"[flow] Step {index}/{len(steps)}: {action}")
+        print(f"{indent}[flow] Step {index}/{len(steps)}: {action}")
 
         if action == "wait":
             automator.wait_for_device(timeout=float(step.get("timeout", 120.0)))
         elif action == "install":
-            automator.install(apk_path=str(step["apk"]), replace=bool(step.get("replace", True)))
+            automator.install(apk_path=str(step["apk"]), replace=as_bool(step.get("replace", True)))
         elif action == "launch":
             automator.launch(package=str(step["package"]), activity=step.get("activity"))
         elif action == "tap":
@@ -291,6 +316,45 @@ def run_flow(flow_path: Path, automator: AndroidAutomator) -> None:
             automator.keyevent(str(step["key"]))
         elif action == "sleep":
             time.sleep(float(step.get("seconds", 1.0)))
+        elif action == "repeat":
+            times = int(step.get("times", 1))
+            if times < 1:
+                msg = f"Step #{index} action=repeat requires 'times' >= 1."
+                raise ValueError(msg)
+            nested_steps = step.get("steps")
+            if not isinstance(nested_steps, list) or not nested_steps:
+                msg = f"Step #{index} action=repeat requires non-empty 'steps' list."
+                raise ValueError(msg)
+            for repeat_index in range(1, times + 1):
+                print(f"{indent}[flow] Repeat {repeat_index}/{times}")
+                nested_variables = dict(variables)
+                nested_variables["index"] = repeat_index
+                execute_flow_steps(nested_steps, automator, nested_variables, depth=depth + 1)
+        elif action == "tap_text_any":
+            texts = step.get("texts")
+            if not isinstance(texts, list) or not texts:
+                msg = f"Step #{index} action=tap_text_any requires non-empty 'texts' list."
+                raise ValueError(msg)
+            contains = as_bool(step.get("contains", False))
+            occurrence = int(step.get("occurrence", 1))
+            last_error: ADBError | None = None
+            for candidate in texts:
+                candidate_text = str(candidate)
+                try:
+                    x, y = automator.tap_text(
+                        text=candidate_text,
+                        contains=contains,
+                        occurrence=occurrence,
+                    )
+                    print(f"{indent}[flow] tapped {x},{y} using {candidate_text!r}")
+                    break
+                except ADBError as exc:
+                    last_error = exc
+            else:
+                msg = f"None of tap_text_any candidates matched: {texts!r}."
+                if last_error:
+                    msg = f"{msg}\nLast error: {last_error}"
+                raise ADBError(msg)
         elif action == "shell":
             command = step.get("command")
             if not isinstance(command, str):
@@ -304,10 +368,10 @@ def run_flow(flow_path: Path, automator: AndroidAutomator) -> None:
         elif action == "tap_text":
             x, y = automator.tap_text(
                 text=str(step["text"]),
-                contains=bool(step.get("contains", False)),
+                contains=as_bool(step.get("contains", False)),
                 occurrence=int(step.get("occurrence", 1)),
             )
-            print(f"[flow] tapped {x},{y}")
+            print(f"{indent}[flow] tapped {x},{y}")
         else:
             msg = f"Unsupported action {action!r} in step #{index}."
             raise ValueError(msg)
