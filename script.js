@@ -1,35 +1,39 @@
 const projects = [
   {
-    name: "Nexa Analytics Dashboard",
+    name: "lottery_tracker",
     description:
-      "Built a performance-focused dashboard for customer trends with interactive charts and role-based access.",
-    stack: ["React", "TypeScript", "Chart.js", "Node.js"],
-    liveUrl: "https://example.com",
-    repoUrl: "https://github.com/"
+      "Cross-platform app for tracking lottery data and results built as an active personal repository.",
+    stack: ["Dart", "Flutter", "Mobile"],
+    liveUrl: "",
+    repoUrl: "https://github.com/akshayengolikar/lottery_tracker",
+    source: "Personal repository"
   },
   {
-    name: "Marketly E-commerce Redesign",
+    name: "CursorAI",
     description:
-      "Redesigned checkout and catalog flows, lifting conversion by 18% and reducing mobile bounce rates.",
-    stack: ["Next.js", "Tailwind", "Stripe", "PostgreSQL"],
-    liveUrl: "https://example.com",
-    repoUrl: "https://github.com/"
+      "Workspace repository used for practical AI-assisted software iteration and project implementation.",
+    stack: ["Automation", "Developer Workflow", "Git"],
+    liveUrl: "",
+    repoUrl: "https://github.com/akshayengolikar/CursorAI",
+    source: "Personal repository"
   },
   {
-    name: "Studio CMS Builder",
+    name: "Data-Analysis-Projects",
     description:
-      "Implemented reusable editing components so content teams could manage landing pages without developer help.",
-    stack: ["React", "Redux", "Express", "Prisma"],
-    liveUrl: "https://example.com",
-    repoUrl: "https://github.com/"
+      "Practice projects for data cleaning, visualization, and exploratory data analysis using Python, SQL, and BI tools.",
+    stack: ["Python", "SQL", "EDA", "Power BI"],
+    liveUrl: "",
+    repoUrl: "https://github.com/akshayengolikar/Data-Analysis-Projects",
+    source: "Forked learning repository"
   },
   {
-    name: "Pulse Health Tracker",
+    name: "awesome-ai-ml-resources",
     description:
-      "Created responsive health metrics views with secure authentication and real-time progress updates.",
-    stack: ["Vue", "Firebase", "Sass", "REST API"],
-    liveUrl: "https://example.com",
-    repoUrl: "https://github.com/"
+      "Curated AI/ML learning resource collection for beginners exploring practical machine learning topics.",
+    stack: ["AI/ML", "Learning", "Resource Curation"],
+    liveUrl: "",
+    repoUrl: "https://github.com/akshayengolikar/awesome-ai-ml-resources",
+    source: "Forked learning repository"
   }
 ];
 
@@ -52,13 +56,18 @@ function renderProjects() {
       (project) => `
       <article class="project-card reveal">
         <h3>${project.name}</h3>
+        <p class="project-meta">${project.source}</p>
         <p>${project.description}</p>
         <ul class="project-stack">
           ${project.stack.map((item) => `<li>${item}</li>`).join("")}
         </ul>
         <div class="project-links">
-          <a href="${project.liveUrl}" target="_blank" rel="noreferrer">Live demo</a>
-          <a href="${project.repoUrl}" target="_blank" rel="noreferrer">Source code</a>
+          ${
+            project.liveUrl
+              ? `<a href="${project.liveUrl}" target="_blank" rel="noreferrer">Live demo</a>`
+              : ""
+          }
+          <a href="${project.repoUrl}" target="_blank" rel="noreferrer">Repository</a>
         </div>
       </article>
     `
@@ -164,7 +173,7 @@ function initializeContactForm() {
       `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
     );
 
-    window.location.href = `mailto:alex.carter@example.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:akkiengolikar@gmail.com?subject=${subject}&body=${body}`;
     contactForm.reset();
   });
 }

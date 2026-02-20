@@ -1,4 +1,4 @@
-## Personal Portfolio Site
+## Akshay Engolikar Portfolio Site
 
 A responsive single-page portfolio website with:
 
@@ -7,6 +7,18 @@ A responsive single-page portfolio website with:
 - Dark/light theme toggle with local storage persistence
 - Scroll-based active nav highlighting
 - Lightweight reveal-on-scroll animations
+
+## Profile data currently used
+
+The current content is customized using publicly indexed profile details:
+
+- Name: Akshay Engolikar
+- Headline: Data Engineer & Software Developer
+- Core skills: Python, SQL, PySpark, object-oriented programming
+- Location: Dayton, OH
+- Links:
+  - LinkedIn: `https://www.linkedin.com/in/akshayengolikar`
+  - GitHub: `https://github.com/akshayengolikar`
 
 ## Run locally
 
@@ -30,5 +42,4 @@ http://localhost:8000
 - Colors, spacing, responsive layout: `styles.css`
 - Project cards and interactions: `script.js`
 
-In `script.js`, edit the `projects` array to replace placeholder entries with
-your own project names, descriptions, links, and stack.
+In `script.js`, edit the `projects` array to replace or reorder project cards.

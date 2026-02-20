@@ -365,6 +365,15 @@ p {
   margin-bottom: 1.15rem;
 }
 
+.project-meta {
+  margin-top: -0.3rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.82rem;
+  color: var(--accent-strong);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 .project-stack {
   display: flex;
   flex-wrap: wrap;
