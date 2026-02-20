@@ -1,12 +1,19 @@
-## Akshay Engolikar Portfolio Site
+# Akshay Engolikar Portfolio (Modern Framework Stack)
 
-A responsive single-page portfolio website with:
+This portfolio now runs on a modern front-end stack:
+
+- **React + TypeScript**
+- **Vite**
+- **Tailwind CSS**
+- **Framer Motion**
+
+The site includes:
 
 - Hero, about, skills, projects, experience, and contact sections
-- Mobile-friendly navigation
-- Dark/light theme toggle with local storage persistence
-- Scroll-based active nav highlighting
-- Lightweight reveal-on-scroll animations
+- Responsive navigation with mobile menu
+- Dark/light mode with persistence
+- Scroll-based active section highlighting
+- Animated reveal transitions
 
 ## Profile data currently used
 
@@ -22,24 +29,25 @@ The current content is customized using publicly indexed profile details:
 
 ## Run locally
 
-Because this is a static site, you can run it with any local web server.
-
-Using Python:
-
 ```bash
-python3 -m http.server 8000
+npm install
+npm run dev
 ```
 
-Then open:
+Open:
 
 ```text
-http://localhost:8000
+http://localhost:5173
+```
+
+## Production build
+
+```bash
+npm run build
+npm run preview
 ```
 
 ## Customize content
 
-- Main markup and section text: `index.html`
-- Colors, spacing, responsive layout: `styles.css`
-- Project cards and interactions: `script.js`
-
-In `script.js`, edit the `projects` array to replace or reorder project cards.
+- Main app layout and sections: `src/App.tsx`
+- Base styling and Tailwind import: `src/index.css`
