@@ -1,239 +1,167 @@
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Award,
-  BriefcaseBusiness,
+  ArrowRight,
   Github,
-  GraduationCap,
   Linkedin,
   Mail,
   MapPin,
   Menu,
-  MoonStar,
   Phone,
-  SunMedium,
+  Sparkles,
   X
 } from "lucide-react";
 import { type FormEvent, type ReactNode, useEffect, useState } from "react";
+import CinematicScene from "./components/CinematicScene";
 
-type Theme = "light" | "dark";
+type StoryChapter = {
+  title: string;
+  copy: string;
+};
 
-type SkillCategory = {
+type ImpactStory = {
+  name: string;
+  moment: string;
+  storyline: string;
+  highlights: string[];
+  stack: string[];
+};
+
+type ToolkitGroup = {
   title: string;
   items: string[];
 };
 
-type ExperienceProject = {
-  project: string;
-  role: string;
-  company: string;
-  location: string;
-  period: string;
-  achievements: string[];
-  environment: string[];
-};
-
-type EducationEntry = {
-  degree: string;
-  school: string;
-  year: string;
-};
-
 const profile = {
   name: "Akshay Engolikar",
-  title: "Python Developer | Data Engineering | API Automation",
+  role: "Python Developer | Data Engineering | API Automation",
+  location: "Dayton, Ohio, United States",
   phone: "+1 (937) 654-0498",
   phoneHref: "tel:+19376540498",
   email: "akshayengolikar27@gmail.com",
   linkedin: "https://www.linkedin.com/in/akshayengolikar/",
-  github: "https://github.com/akshayengolikar",
-  location: "Dayton, Ohio, United States"
+  github: "https://github.com/akshayengolikar"
 };
 
 const navLinks = [
   { id: "home", label: "Home" },
-  { id: "summary", label: "Summary" },
-  { id: "skills", label: "Skills" },
-  { id: "experience", label: "Experience" },
-  { id: "education", label: "Education" },
-  { id: "certifications", label: "Certifications" },
-  { id: "contact", label: "Contact" }
+  { id: "story", label: "Story" },
+  { id: "impact", label: "Impact" },
+  { id: "toolkit", label: "Toolkit" },
+  { id: "contact", label: "Connect" }
 ];
 
-const statHighlights = [
-  { label: "Years of experience", value: "5+" },
-  { label: "API performance gain", value: "30%" },
-  { label: "Pipeline runtime improvement", value: "40%" },
-  { label: "Data quality accuracy", value: "98%+" }
+const cinematicIntro =
+  "I design backend experiences that feel invisible to users but unforgettable to teams. From API choreography to data pipeline orchestration, I blend automation, cloud, and analytics to move products from fragile to production-ready.";
+
+const signatureStats = [
+  { value: "5+", label: "Years building in production" },
+  { value: "30%", label: "API response boost delivered" },
+  { value: "40%", label: "Pipeline runtime reduced" },
+  { value: "98%+", label: "Data quality reliability achieved" }
 ];
 
-const summaryText =
-  "Python Developer with 5+ years of hands-on experience in building automation scripts, REST APIs, data pipelines, ETL workflows, and analytical solutions across Healthcare and Banking domains. Skilled in Python, SQL, PySpark, Flask, FastAPI, AWS, Azure, Airflow, Data Warehouse modeling, CI/CD automation, and API integrations. Proven ability to optimize performance, improve code reliability, implement logging and monitoring, and support scalable production workloads in Agile environments.";
-
-const strengths = [
-  "Automation-first engineering mindset for repeatable, resilient workflows",
-  "Strong ownership from requirement analysis to production deployment",
-  "Consistent focus on performance tuning, monitoring, and compliance"
-];
-
-const skillCategories: SkillCategory[] = [
-  { title: "Programming", items: ["Python", "SQL", "PySpark", "Java (Basics)"] },
-  { title: "Frameworks", items: ["Flask", "FastAPI", "Django (Basics)"] },
+const storyChapters: StoryChapter[] = [
   {
-    title: "Cloud",
-    items: ["AWS (S3, EC2, Lambda, IAM)", "Azure (VMs, Functions)"]
+    title: "My style",
+    copy:
+      "I build systems that are measurable, observable, and safe to evolve. Every flow starts with business intent and ends with resilient automation."
   },
   {
-    title: "Databases",
-    items: ["PostgreSQL", "MySQL", "SQL Server", "Snowflake"]
+    title: "Where I create value",
+    copy:
+      "Across Banking and Healthcare, I have built API and ETL platforms that turn fragmented source data into trustable operational intelligence."
   },
   {
-    title: "Data and ETL Tools",
-    items: ["Airflow", "Pandas", "NumPy", "Kafka", "APIs"]
-  },
-  {
-    title: "DevOps and CI/CD",
-    items: ["Git", "Docker", "Jenkins", "Azure DevOps"]
-  },
-  { title: "Testing and Monitoring", items: ["PyTest", "Logging", "Postman"] },
-  {
-    title: "Other",
-    items: ["Unix/Linux", "Pandas Profiling", "JSON", "REST", "Agile/Scrum"]
+    title: "How I operate",
+    copy:
+      "I work in Agile environments, shipping incrementally with strong code quality, test coverage, logging, and cloud-ready deployment patterns."
   }
 ];
 
-const experienceProjects: ExperienceProject[] = [
+const impactStories: ImpactStory[] = [
   {
-    project: "Customer Risk Analytics and API Automation",
-    role: "Python Developer",
-    company: "Fifth Third Bank",
-    location: "Kentwood, MI",
-    period: "Jan 2025 - Present",
-    achievements: [
-      "Developed Python-based analytics scripts for credit-risk scoring and customer behavior insights.",
-      "Built secure REST API endpoints using Flask/FastAPI for data retrieval and reporting.",
-      "Automated daily ETL processes and validations using Airflow DAGs with retry logic.",
-      "Implemented SQL transformations for aggregations and customer risk segmentation models.",
-      "Integrated financial data using AWS S3 ingestion and metadata tagging.",
-      "Containerized API services using Docker and deployed to cloud runtime environments.",
-      "Applied IAM-based security ensuring PCI-DSS compliance controls.",
-      "Improved API response time by 30% with indexing and async I/O optimization.",
-      "Implemented custom logging and exception handling for audit traceability.",
-      "Authored automated PyTest cases for API testing, improving stability.",
-      "Collaborated with analytics and compliance teams to deliver SLA-driven reports."
+    name: "Risk Signal Engine",
+    moment: "Fifth Third Bank · Jan 2025 - Present",
+    storyline:
+      "Architected a secure analytics and API layer for customer risk intelligence, combining ETL reliability with low-latency reporting endpoints.",
+    highlights: [
+      "Built Flask/FastAPI services for risk retrieval and reporting workflows.",
+      "Automated Airflow validations with retries and SLA-oriented monitoring.",
+      "Drove a 30% API response improvement through indexing and async optimization."
     ],
-    environment: [
-      "Python",
-      "Flask",
-      "FastAPI",
-      "SQL",
-      "Airflow",
-      "AWS S3",
-      "Docker",
-      "Git",
-      "Linux"
-    ]
+    stack: ["Python", "Flask", "FastAPI", "SQL", "Airflow", "AWS S3", "Docker"]
   },
   {
-    project: "Pharmacy Data Integration and Refill Automation Platform",
-    role: "Python Automation Developer",
-    company: "CVS Health",
-    location: "NYC, NY",
-    period: "Oct 2023 - Nov 2024",
-    achievements: [
-      "Automated prescription refill workflows using Python scripts and REST API integrations.",
-      "Parsed pharmacy data from JSON, XML, and SFTP feeds ensuring secure ingestion.",
-      "Designed scalable Pandas transformations improving pipeline runtime by 40%.",
-      "Scheduled nightly automation using Airflow with alerting and SLA dashboards.",
-      "Integrated drug catalog and Rx status updates with Snowflake warehouse.",
-      "Executed PySpark batch jobs for high-volume claim processing.",
-      "Built SQL queries for KPI dashboards on prescription trends and adherence rates.",
-      "Created Flask microservices for automated notification triggers.",
-      "Improved data quality validation rules increasing accuracy to 98%+.",
-      "Implemented role-based access to protect HIPAA data.",
-      "Delivered code reviews, version control and branching using Git and CI/CD."
+    name: "Refill Automation Cinema",
+    moment: "CVS Health · Oct 2023 - Nov 2024",
+    storyline:
+      "Created a high-throughput refill automation platform where ETL, data quality, and notifications worked as a single coordinated system.",
+    highlights: [
+      "Engineered Pandas and PySpark workflows for large-scale pharmacy claims.",
+      "Reduced pipeline runtime by 40% while raising data confidence to 98%+.",
+      "Connected Snowflake analytics layers to KPI dashboards and alerts."
     ],
-    environment: [
-      "Python",
-      "Pandas",
-      "Airflow",
-      "PySpark",
-      "Flask",
-      "Snowflake",
-      "Git",
-      "SQL",
-      "Linux"
-    ]
+    stack: ["Python", "Pandas", "PySpark", "Airflow", "Snowflake", "Flask", "SQL"]
   },
   {
-    project: "Data Quality Automation for Healthcare Systems",
-    role: "Python Developer",
-    company: "Deloitte",
-    location: "Hyderabad, India",
-    period: "Jun 2020 - Dec 2022",
-    achievements: [
-      "Created Python automation scripts for data reconciliation across clinical systems.",
-      "Developed reusable ETL functions with Pandas improving maintainability.",
-      "Wrote SQL validations to identify missing and out-of-range patient attributes.",
-      "Automated secure file ingestion from SFTP and APIs.",
-      "Built Airflow workflows with logs, retries and dependency chains.",
-      "Integrated datasets into AWS S3 and built metadata-driven pipelines.",
-      "Used PyTest to automate testing of ingestion and transformation logic.",
-      "Enhanced performance with NumPy vectorization reducing execution time.",
-      "Supported Django REST APIs for data submission and approvals.",
-      "Produced audit-ready logs and documentation supporting HIPAA compliance.",
-      "Actively participated in Agile ceremonies and sprint planning activities."
+    name: "Clinical Data Reliability Mesh",
+    moment: "Deloitte · Jun 2020 - Dec 2022",
+    storyline:
+      "Designed reconciliation and ingestion automations for healthcare systems with audit-first logging, compliance-ready traces, and reusable ETL modules.",
+    highlights: [
+      "Automated SFTP/API ingestion and quality checks across clinical sources.",
+      "Improved transformation speed using NumPy vectorization strategies.",
+      "Delivered HIPAA-supporting logs and robust test coverage with PyTest."
     ],
-    environment: [
-      "Python",
-      "Pandas",
-      "NumPy",
-      "SQL",
-      "Airflow",
-      "AWS S3",
-      "Django",
-      "Linux",
-      "Git"
-    ]
+    stack: ["Python", "Pandas", "NumPy", "Airflow", "AWS S3", "Django", "PyTest"]
   },
   {
-    project: "API-Based Data Migration for Engineering Catalogs",
-    role: "Software Developer",
-    company: "Cyient",
-    location: "Hyderabad, India",
-    period: "Jun 2019 - Jun 2020",
-    achievements: [
-      "Built Python scripts to extract equipment data from legacy databases.",
-      "Developed transformation rules using Pandas ensuring schema compatibility.",
-      "Integrated APIs to sync catalog metadata to centralized systems.",
-      "Automated versioning and backups of migrated datasets.",
-      "Implemented reusable functions for faster scalability.",
-      "Performed SQL cleanup operations increasing lookup performance.",
-      "Coordinated with engineering teams to validate migrated datasets.",
-      "Logged audit history and exceptions to maintain traceability.",
-      "Created deployment utilities using Git and Unix scripting.",
-      "Delivered sprint-based incremental releases with safe rollback plans."
+    name: "Migration Orchestrator",
+    moment: "Cyient · Jun 2019 - Jun 2020",
+    storyline:
+      "Built API-based migration flows to modernize engineering catalogs, preserving data lineage and enabling safer incremental releases.",
+    highlights: [
+      "Developed transformation layers for schema-compatible dataset migration.",
+      "Automated versioning, rollback-safe release flows, and audit capture.",
+      "Streamlined lookup performance with SQL cleanup and tuned extraction logic."
     ],
-    environment: ["Python", "Pandas", "SQL", "APIs", "Git", "Linux"]
+    stack: ["Python", "Pandas", "SQL", "REST APIs", "Git", "Linux"]
   }
 ];
 
-const educationEntries: EducationEntry[] = [
+const toolkitGroups: ToolkitGroup[] = [
   {
-    degree: "Master of Science - Computer Science",
-    school: "University of Dayton, Ohio",
-    year: "2024"
+    title: "Core Language Layer",
+    items: ["Python", "SQL", "PySpark", "Java (Basics)"]
   },
   {
-    degree: "Bachelor of Technology - Computer Science Engineering",
-    school: "Avanthi Institute of Engineering and Technology (JNTUH)",
-    year: "2019"
+    title: "API and App Frameworks",
+    items: ["Flask", "FastAPI", "Django (Basics)", "REST Integrations"]
+  },
+  {
+    title: "Cloud and Data Platforms",
+    items: ["AWS (S3, EC2, Lambda, IAM)", "Azure (VMs, Functions)", "Snowflake"]
+  },
+  {
+    title: "ETL and Streaming",
+    items: ["Airflow", "Pandas", "NumPy", "Kafka", "Data Modeling"]
+  },
+  {
+    title: "DevOps and Reliability",
+    items: ["Docker", "Git", "Jenkins", "Azure DevOps", "Unix/Linux"]
+  },
+  {
+    title: "Quality and Delivery",
+    items: ["PyTest", "Postman", "Logging", "Monitoring", "Agile/Scrum"]
   }
 ];
 
-const certifications = [
+const credentials = [
+  "MS in Computer Science · University of Dayton (2024)",
+  "B.Tech in CSE · Avanthi Institute of Engineering and Technology (2019)",
   "AWS Certified Cloud Practitioner",
-  "Data Engineering with Python - Coursera",
-  "SQL for Data Science - Coursera"
+  "Data Engineering with Python · Coursera",
+  "SQL for Data Science · Coursera"
 ];
 
 type RevealProps = {
@@ -247,7 +175,7 @@ function Reveal({ children, className = "", delay = 0 }: RevealProps) {
     <motion.div
       initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: "easeOut", delay }}
+      transition={{ duration: 0.5, ease: "easeOut", delay }}
       viewport={{ once: true, amount: 0.2 }}
       className={className}
     >
@@ -265,60 +193,38 @@ type SectionHeadingProps = {
 function SectionHeading({ eyebrow, title, description }: SectionHeadingProps) {
   return (
     <div className="mb-8">
-      <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-indigo-500 dark:text-indigo-300">
+      <p className="mb-2 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-indigo-300">
+        <Sparkles size={14} />
         {eyebrow}
       </p>
-      <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+      <h2 className="max-w-3xl text-3xl font-bold tracking-tight text-white sm:text-4xl">
         {title}
       </h2>
       {description ? (
-        <p className="mt-3 max-w-3xl text-slate-600 dark:text-slate-300">
-          {description}
-        </p>
+        <p className="mt-3 max-w-3xl text-slate-300">{description}</p>
       ) : null}
     </div>
   );
 }
 
-function getInitialTheme(): Theme {
-  if (typeof window === "undefined") {
-    return "dark";
-  }
-
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "light" || savedTheme === "dark") {
-    return savedTheme;
-  }
-
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-}
-
-function App() {
-  const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
+export default function App() {
   const [activeSection, setActiveSection] = useState("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-    localStorage.setItem("theme", theme);
-  }, [theme]);
 
   useEffect(() => {
     const sections = document.querySelectorAll<HTMLElement>("main section[id]");
     const observer = new IntersectionObserver(
       (entries) => {
-        const mostVisible = entries
+        const visible = entries
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 
-        if (mostVisible[0]) {
-          setActiveSection(mostVisible[0].target.id);
+        if (visible[0]) {
+          setActiveSection(visible[0].target.id);
         }
       },
       {
-        threshold: [0.24, 0.45, 0.7],
+        threshold: [0.2, 0.45, 0.7],
         rootMargin: "-28% 0px -50% 0px"
       }
     );
@@ -338,7 +244,7 @@ function App() {
     return () => window.removeEventListener("resize", closeOnDesktop);
   }, []);
 
-  const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onContactSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
@@ -356,11 +262,14 @@ function App() {
   };
 
   const currentYear = new Date().getFullYear();
+  const glassClass =
+    "rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md shadow-[0_18px_50px_rgba(15,23,42,0.35)]";
 
   return (
-    <div className="relative min-h-screen overflow-x-clip bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-      <div className="pointer-events-none absolute -top-28 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-indigo-300/35 blur-3xl dark:bg-indigo-500/20" />
-      <div className="pointer-events-none absolute right-[-8rem] top-[28rem] h-80 w-80 rounded-full bg-violet-300/30 blur-3xl dark:bg-violet-500/20" />
+    <div className="relative min-h-screen overflow-x-clip bg-slate-950 text-slate-100">
+      <CinematicScene />
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_20%_10%,rgba(99,102,241,0.25),transparent_42%),radial-gradient(circle_at_80%_15%,rgba(6,182,212,0.2),transparent_38%),radial-gradient(circle_at_60%_85%,rgba(168,85,247,0.22),transparent_36%)]" />
+      <div className="film-grain pointer-events-none fixed inset-0 -z-10 opacity-30" />
 
       <a
         href="#main-content"
@@ -369,12 +278,12 @@ function App() {
         Skip to content
       </a>
 
-      <header className="sticky top-0 z-50 border-b border-slate-200/75 bg-white/90 backdrop-blur-lg dark:border-slate-700/70 dark:bg-slate-950/85">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 w-[min(1140px,92vw)] items-center justify-between gap-4">
           <a
             href="#home"
             aria-label="Go to homepage"
-            className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 text-sm font-bold text-white shadow-lg shadow-indigo-500/30"
+            className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 text-sm font-bold text-white shadow-lg shadow-indigo-500/25"
           >
             AE
           </a>
@@ -387,8 +296,8 @@ function App() {
                     href={`#${item.id}`}
                     className={`rounded-md px-3 py-2 text-sm font-medium transition ${
                       activeSection === item.id
-                        ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-200"
-                        : "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+                        ? "bg-indigo-500/25 text-indigo-100"
+                        : "text-slate-300 hover:text-white"
                     }`}
                   >
                     {item.label}
@@ -398,34 +307,16 @@ function App() {
             </ul>
           </nav>
 
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() =>
-                setTheme((currentTheme) =>
-                  currentTheme === "dark" ? "light" : "dark"
-                )
-              }
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-indigo-400 dark:hover:text-indigo-200"
-              aria-label="Toggle color theme"
-            >
-              {theme === "dark" ? <SunMedium size={16} /> : <MoonStar size={16} />}
-              <span className="hidden sm:inline">
-                {theme === "dark" ? "Light mode" : "Dark mode"}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen((open) => !open)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 lg:hidden dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
-              aria-expanded={mobileMenuOpen}
-              aria-controls="mobile-nav"
-              aria-label="Toggle navigation menu"
-            >
-              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((open) => !open)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 bg-white/5 text-slate-100 lg:hidden"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav"
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
 
         <AnimatePresence>
@@ -433,11 +324,11 @@ function App() {
             <motion.nav
               id="mobile-nav"
               aria-label="Mobile navigation"
-              initial={{ opacity: 0, y: -14 }}
+              initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="border-t border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-950 lg:hidden"
+              className="border-t border-white/10 bg-slate-900/90 p-4 backdrop-blur-xl lg:hidden"
             >
               <ul className="flex flex-col gap-2">
                 {navLinks.map((item) => (
@@ -447,8 +338,8 @@ function App() {
                       onClick={() => setMobileMenuOpen(false)}
                       className={`block rounded-md px-3 py-2 text-sm font-medium ${
                         activeSection === item.id
-                          ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-200"
-                          : "text-slate-700 dark:text-slate-300"
+                          ? "bg-indigo-500/25 text-indigo-100"
+                          : "text-slate-200"
                       }`}
                     >
                       {item.label}
@@ -462,300 +353,187 @@ function App() {
       </header>
 
       <main id="main-content" className="mx-auto w-[min(1140px,92vw)]">
-        <section id="home" className="scroll-mt-24 py-16 sm:py-24">
-          <div className="grid gap-4 lg:grid-cols-[1.35fr_1fr]">
-            <Reveal className="rounded-2xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/70 dark:border-slate-700 dark:bg-slate-900 dark:shadow-none">
-              <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-indigo-500 dark:text-indigo-300">
-                Python Developer | Data Engineering | API Automation
+        <section
+          id="home"
+          className="scroll-mt-24 flex min-h-[calc(100vh-4rem)] items-center py-16"
+        >
+          <div className="grid w-full gap-4 lg:grid-cols-[1.28fr_1fr]">
+            <Reveal className={`${glassClass} p-8`}>
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-indigo-200">
+                Cinematic backend engineering
               </p>
-              <h1 className="mb-2 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl dark:text-white">
-                {profile.name}
+              <h1 className="max-w-[14ch] text-4xl font-extrabold tracking-tight text-white sm:text-6xl">
+                I turn complex data flows into smooth product moments.
               </h1>
-              <p className="mb-4 text-lg font-semibold text-indigo-600 dark:text-indigo-300">
-                {profile.title}
+              <p className="mt-5 text-lg font-medium text-indigo-200">{profile.name}</p>
+              <p className="mt-1 text-sm uppercase tracking-[0.14em] text-cyan-200/90">
+                {profile.role}
               </p>
-              <p className="max-w-3xl text-slate-600 dark:text-slate-300">
-                Building production-grade automation, APIs, and ETL platforms
-                across Banking and Healthcare with reliability, observability,
-                and performance at the center.
-              </p>
-
-              <div className="mt-6 grid gap-2 text-sm sm:grid-cols-2">
-                <a
-                  href={profile.phoneHref}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-slate-700 transition hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-200 dark:hover:border-indigo-400 dark:hover:text-indigo-200"
-                >
-                  <Phone size={15} />
-                  {profile.phone}
-                </a>
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-slate-700 transition hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-200 dark:hover:border-indigo-400 dark:hover:text-indigo-200"
-                >
-                  <Mail size={15} />
-                  {profile.email}
-                </a>
-                <a
-                  href={profile.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-slate-700 transition hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-200 dark:hover:border-indigo-400 dark:hover:text-indigo-200"
-                >
-                  <Linkedin size={15} />
-                  LinkedIn Profile
-                </a>
-                <span className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-slate-700 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-200">
-                  <MapPin size={15} />
-                  {profile.location}
-                </span>
-              </div>
+              <p className="mt-6 max-w-2xl text-slate-300">{cinematicIntro}</p>
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <a
-                  href="#experience"
-                  className="rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/25 transition hover:brightness-110"
+                  href="#impact"
+                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
                 >
-                  View experience
+                  Explore impact
+                  <ArrowRight size={15} />
                 </a>
                 <a
                   href="#contact"
-                  className="rounded-lg border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-indigo-400 dark:hover:text-indigo-200"
+                  className="rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-100 transition hover:border-indigo-300/70 hover:text-indigo-100"
                 >
-                  Contact me
-                </a>
-                <a
-                  href={`mailto:${profile.email}?subject=Resume%20Request`}
-                  className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-indigo-400 dark:hover:text-indigo-200"
-                >
-                  Request resume
+                  Start a conversation
                 </a>
               </div>
             </Reveal>
 
-            <Reveal
-              delay={0.08}
-              className="rounded-2xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-200/70 dark:border-slate-700 dark:bg-slate-900 dark:shadow-none"
-            >
-              <h2 className="mb-5 text-xl font-bold text-slate-900 dark:text-white">
-                Career highlights
-              </h2>
+            <Reveal delay={0.08} className={glassClass}>
+              <h2 className="mb-5 text-xl font-bold text-white">Signature Frames</h2>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                {statHighlights.map((item) => (
+                {signatureStats.map((item) => (
                   <div
                     key={item.label}
-                    className="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/70"
+                    className="rounded-lg border border-white/10 bg-white/5 p-3"
                   >
-                    <p className="text-2xl font-bold text-slate-900 dark:text-white">
-                      {item.value}
-                    </p>
-                    <p className="text-sm text-slate-600 dark:text-slate-300">
-                      {item.label}
-                    </p>
+                    <p className="text-2xl font-bold text-cyan-200">{item.value}</p>
+                    <p className="text-sm text-slate-300">{item.label}</p>
                   </div>
                 ))}
               </div>
+              <div className="mt-6 rounded-lg border border-indigo-300/20 bg-indigo-500/10 p-3 text-sm text-indigo-100">
+                Banking precision + Healthcare reliability + API-first product thinking.
+              </div>
             </Reveal>
           </div>
         </section>
 
-        <section id="summary" className="scroll-mt-24 py-16 sm:py-24">
+        <section id="story" className="scroll-mt-24 py-20 sm:py-24">
           <Reveal>
             <SectionHeading
-              eyebrow="Professional Summary"
-              title="Data-driven engineer focused on reliable automation and production scale"
+              eyebrow="Story"
+              title="Not a resume timeline - a systems narrative"
+              description="Over 5+ years, I have focused on one theme: making data-intensive platforms feel dependable, scalable, and calm under pressure."
             />
           </Reveal>
 
-          <div className="grid gap-4 lg:grid-cols-[1.35fr_1fr]">
-            <Reveal className="rounded-2xl border border-slate-200 bg-white p-7 shadow-xl shadow-slate-200/70 dark:border-slate-700 dark:bg-slate-900 dark:shadow-none">
-              <p className="text-slate-600 dark:text-slate-300">{summaryText}</p>
-            </Reveal>
-
-            <Reveal
-              delay={0.07}
-              className="rounded-2xl border border-slate-200 bg-white p-7 shadow-xl shadow-slate-200/70 dark:border-slate-700 dark:bg-slate-900 dark:shadow-none"
-            >
-              <h3 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
-                What I bring
-              </h3>
-              <ul className="space-y-3">
-                {strengths.map((item) => (
-                  <li
-                    key={item}
-                    className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-200"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          </div>
-        </section>
-
-        <section id="skills" className="scroll-mt-24 py-16 sm:py-24">
-          <Reveal>
-            <SectionHeading
-              eyebrow="Technical Skills"
-              title="Modern data and backend toolkit"
-            />
-          </Reveal>
-
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {skillCategories.map((category, index) => (
+          <div className="grid gap-4 md:grid-cols-3">
+            {storyChapters.map((chapter, index) => (
               <Reveal
-                key={category.title}
-                delay={index * 0.04}
-                className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/70 dark:border-slate-700 dark:bg-slate-900 dark:shadow-none"
+                key={chapter.title}
+                delay={index * 0.06}
+                className={glassClass}
               >
-                <h3 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
-                  {category.title}
-                </h3>
-                <ul className="flex flex-wrap gap-2">
-                  {category.items.map((item) => (
+                <h3 className="mb-3 text-xl font-semibold text-white">{chapter.title}</h3>
+                <p className="text-sm text-slate-300">{chapter.copy}</p>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal delay={0.2} className={`${glassClass} mt-4`}>
+            <h3 className="mb-4 text-lg font-semibold text-white">Credentials</h3>
+            <ul className="grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
+              {credentials.map((item) => (
+                <li
+                  key={item}
+                  className="rounded-lg border border-white/10 bg-white/5 px-3 py-2"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </section>
+
+        <section id="impact" className="scroll-mt-24 py-20 sm:py-24">
+          <Reveal>
+            <SectionHeading
+              eyebrow="Impact"
+              title="Scenes from projects that moved real metrics"
+            />
+          </Reveal>
+
+          <div className="grid gap-4 lg:grid-cols-2">
+            {impactStories.map((story, index) => (
+              <Reveal
+                key={story.name}
+                delay={index * 0.05}
+                className={`${glassClass} p-7`}
+              >
+                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-indigo-200">
+                  {story.moment}
+                </p>
+                <h3 className="mb-3 text-2xl font-bold text-white">{story.name}</h3>
+                <p className="mb-4 text-slate-300">{story.storyline}</p>
+                <ul className="mb-5 space-y-2">
+                  {story.highlights.map((item) => (
                     <li
-                      key={`${category.title}-${item}`}
-                      className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                      key={`${story.name}-${item}`}
+                      className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200"
                     >
                       {item}
                     </li>
                   ))}
                 </ul>
-              </Reveal>
-            ))}
-          </div>
-        </section>
-
-        <section id="experience" className="scroll-mt-24 py-16 sm:py-24">
-          <Reveal>
-            <SectionHeading
-              eyebrow="Professional Experience"
-              title="End-to-end delivery across Banking and Healthcare programs"
-            />
-          </Reveal>
-
-          <div className="space-y-5">
-            {experienceProjects.map((item, index) => (
-              <Reveal
-                key={`${item.company}-${item.project}`}
-                delay={index * 0.05}
-                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/70 dark:border-slate-700 dark:bg-slate-900 dark:shadow-none"
-              >
-                <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <p className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-indigo-500 dark:text-indigo-300">
-                      {item.period}
-                    </p>
-                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
-                      {item.project}
-                    </h3>
-                    <p className="mt-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-                      {item.role} - {item.company} ({item.location})
-                    </p>
-                  </div>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                    <BriefcaseBusiness size={14} />
-                    Project Delivery
-                  </span>
-                </div>
-
-                <ul className="grid gap-2 text-sm text-slate-700 dark:text-slate-200">
-                  {item.achievements.map((achievement) => (
-                    <li
-                      key={`${item.project}-${achievement}`}
-                      className="rounded-lg bg-slate-50 px-3 py-2 dark:bg-slate-800/70"
+                <div className="flex flex-wrap gap-2">
+                  {story.stack.map((tech) => (
+                    <span
+                      key={`${story.name}-${tech}`}
+                      className="rounded-full border border-cyan-200/20 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-100"
                     >
-                      {achievement}
-                    </li>
+                      {tech}
+                    </span>
                   ))}
-                </ul>
-
-                <div className="mt-5">
-                  <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-indigo-500 dark:text-indigo-300">
-                    Environment
-                  </p>
-                  <ul className="flex flex-wrap gap-2">
-                    {item.environment.map((tech) => (
-                      <li
-                        key={`${item.project}-${tech}`}
-                        className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-                      >
-                        {tech}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               </Reveal>
             ))}
           </div>
         </section>
 
-        <section id="education" className="scroll-mt-24 py-16 sm:py-24">
-          <Reveal>
-            <SectionHeading eyebrow="Education" title="Academic foundation" />
-          </Reveal>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            {educationEntries.map((entry, index) => (
-              <Reveal
-                key={entry.degree}
-                delay={index * 0.06}
-                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/70 dark:border-slate-700 dark:bg-slate-900 dark:shadow-none"
-              >
-                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300">
-                  <GraduationCap size={18} />
-                </div>
-                <h3 className="mb-2 text-xl font-bold text-slate-900 dark:text-white">
-                  {entry.degree}
-                </h3>
-                <p className="text-slate-600 dark:text-slate-300">{entry.school}</p>
-                <p className="mt-2 text-sm font-semibold text-indigo-600 dark:text-indigo-300">
-                  Graduated: {entry.year}
-                </p>
-              </Reveal>
-            ))}
-          </div>
-        </section>
-
-        <section id="certifications" className="scroll-mt-24 py-16 sm:py-24">
+        <section id="toolkit" className="scroll-mt-24 py-20 sm:py-24">
           <Reveal>
             <SectionHeading
-              eyebrow="Certifications"
-              title="Continuous learning and credential growth"
+              eyebrow="Toolkit"
+              title="The stack behind my production work"
             />
           </Reveal>
 
-          <div className="grid gap-4 md:grid-cols-3">
-            {certifications.map((item, index) => (
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {toolkitGroups.map((group, index) => (
               <Reveal
-                key={item}
-                delay={index * 0.05}
-                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/70 dark:border-slate-700 dark:bg-slate-900 dark:shadow-none"
+                key={group.title}
+                delay={index * 0.04}
+                className={`${glassClass} p-5`}
               >
-                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-violet-600 dark:bg-violet-500/20 dark:text-violet-300">
-                  <Award size={18} />
+                <h3 className="mb-4 text-lg font-semibold text-white">{group.title}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {group.items.map((item) => (
+                    <span
+                      key={`${group.title}-${item}`}
+                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-200"
+                    >
+                      {item}
+                    </span>
+                  ))}
                 </div>
-                <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
-                  {item}
-                </p>
               </Reveal>
             ))}
           </div>
         </section>
 
-        <section id="contact" className="scroll-mt-24 py-16 sm:py-24">
-          <div className="grid gap-4 lg:grid-cols-2">
-            <Reveal className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/70 dark:border-slate-700 dark:bg-slate-900 dark:shadow-none">
+        <section id="contact" className="scroll-mt-24 py-20 sm:py-24">
+          <div className="grid gap-4 lg:grid-cols-[1.1fr_1fr]">
+            <Reveal className={`${glassClass} p-7`}>
               <SectionHeading
-                eyebrow="Contact"
-                title="Open to Python, data engineering, and API automation opportunities"
-                description="Reach out for full-time roles, contracts, and consulting opportunities."
+                eyebrow="Connect"
+                title="Let us build your next high-performance data product"
+                description="Open to full-time roles, consulting, and projects where data engineering and API automation are mission-critical."
               />
-
               <ul className="space-y-3 text-sm">
                 <li>
                   <a
                     href={profile.phoneHref}
-                    className="inline-flex items-center gap-2 text-slate-700 hover:text-indigo-700 dark:text-slate-200 dark:hover:text-indigo-200"
+                    className="inline-flex items-center gap-2 text-slate-200 transition hover:text-indigo-100"
                   >
                     <Phone size={16} />
                     {profile.phone}
@@ -764,7 +542,7 @@ function App() {
                 <li>
                   <a
                     href={`mailto:${profile.email}`}
-                    className="inline-flex items-center gap-2 text-slate-700 hover:text-indigo-700 dark:text-slate-200 dark:hover:text-indigo-200"
+                    className="inline-flex items-center gap-2 text-slate-200 transition hover:text-indigo-100"
                   >
                     <Mail size={16} />
                     {profile.email}
@@ -775,10 +553,10 @@ function App() {
                     href={profile.linkedin}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 text-slate-700 hover:text-indigo-700 dark:text-slate-200 dark:hover:text-indigo-200"
+                    className="inline-flex items-center gap-2 text-slate-200 transition hover:text-indigo-100"
                   >
                     <Linkedin size={16} />
-                    linkedin.com/in/akshayengolikar
+                    LinkedIn
                   </a>
                 </li>
                 <li>
@@ -786,62 +564,60 @@ function App() {
                     href={profile.github}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 text-slate-700 hover:text-indigo-700 dark:text-slate-200 dark:hover:text-indigo-200"
+                    className="inline-flex items-center gap-2 text-slate-200 transition hover:text-indigo-100"
                   >
                     <Github size={16} />
-                    github.com/akshayengolikar
+                    GitHub
                   </a>
                 </li>
-                <li className="inline-flex items-center gap-2 text-slate-700 dark:text-slate-200">
+                <li className="inline-flex items-center gap-2 text-slate-200">
                   <MapPin size={16} />
                   {profile.location}
                 </li>
               </ul>
             </Reveal>
 
-            <Reveal
-              delay={0.08}
-              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/70 dark:border-slate-700 dark:bg-slate-900 dark:shadow-none"
-            >
-              <h3 className="mb-4 text-xl font-bold text-slate-900 dark:text-white">
-                Send a quick message
+            <Reveal delay={0.08} className={`${glassClass} p-7`}>
+              <h3 className="mb-4 text-xl font-bold text-white">
+                Tell me what you are building
               </h3>
-              <form className="space-y-4" onSubmit={handleContactSubmit}>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-200">
+              <form className="space-y-4" onSubmit={onContactSubmit}>
+                <label className="block text-sm font-medium text-slate-200">
                   Name
                   <input
                     type="text"
                     name="name"
                     required
-                    className="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none ring-indigo-500 transition focus:ring-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                    className="mt-1 block w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-slate-100 outline-none ring-indigo-400 transition focus:ring-2"
                   />
                 </label>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-200">
+                <label className="block text-sm font-medium text-slate-200">
                   Email
                   <input
                     type="email"
                     name="email"
                     required
-                    className="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none ring-indigo-500 transition focus:ring-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                    className="mt-1 block w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-slate-100 outline-none ring-indigo-400 transition focus:ring-2"
                   />
                 </label>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-200">
-                  Message
+                <label className="block text-sm font-medium text-slate-200">
+                  Project Brief
                   <textarea
                     name="message"
                     rows={5}
                     required
-                    className="mt-1 block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none ring-indigo-500 transition focus:ring-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                    className="mt-1 block w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-slate-100 outline-none ring-indigo-400 transition focus:ring-2"
                   />
                 </label>
                 <button
                   type="submit"
-                  className="rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/25 transition hover:brightness-110"
+                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
                 >
-                  Send message
+                  Send cinematic brief
+                  <ArrowRight size={15} />
                 </button>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Submitting opens your email app with your message prefilled.
+                <p className="text-xs text-slate-400">
+                  This opens your email app with your message prefilled.
                 </p>
               </form>
             </Reveal>
@@ -849,9 +625,9 @@ function App() {
         </section>
       </main>
 
-      <footer className="border-t border-slate-200/80 py-6 dark:border-slate-700/70">
+      <footer className="border-t border-white/10 py-6">
         <div className="mx-auto flex w-[min(1140px,92vw)] flex-wrap items-center justify-between gap-3">
-          <p className="text-sm text-slate-600 dark:text-slate-300">
+          <p className="text-sm text-slate-400">
             &copy; {currentYear} {profile.name}
           </p>
           <div className="flex items-center gap-4 text-sm font-medium">
@@ -859,7 +635,7 @@ function App() {
               href={profile.github}
               target="_blank"
               rel="noreferrer"
-              className="text-slate-600 hover:text-indigo-700 dark:text-slate-300 dark:hover:text-indigo-200"
+              className="text-slate-300 transition hover:text-indigo-200"
             >
               GitHub
             </a>
@@ -867,13 +643,13 @@ function App() {
               href={profile.linkedin}
               target="_blank"
               rel="noreferrer"
-              className="text-slate-600 hover:text-indigo-700 dark:text-slate-300 dark:hover:text-indigo-200"
+              className="text-slate-300 transition hover:text-indigo-200"
             >
               LinkedIn
             </a>
             <a
               href={`mailto:${profile.email}`}
-              className="text-slate-600 hover:text-indigo-700 dark:text-slate-300 dark:hover:text-indigo-200"
+              className="text-slate-300 transition hover:text-indigo-200"
             >
               Email
             </a>
@@ -883,5 +659,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

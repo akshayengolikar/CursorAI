@@ -6,12 +6,13 @@ This portfolio now runs on a modern front-end stack:
 - **Vite**
 - **Tailwind CSS**
 - **Framer Motion**
+- **Three.js** via **React Three Fiber** + **Drei**
 
 The site includes:
 
-- Hero, summary, skills, experience, education, certifications, and contact sections
+- Cinematic 3D animated scene background
+- Story-driven sections (home, story, impact, toolkit, connect)
 - Responsive navigation with mobile menu
-- Dark/light mode with persistence
 - Scroll-based active section highlighting
 - Animated reveal transitions
 
@@ -54,3 +55,4 @@ npm run preview
 
 - Main app layout and sections: `src/App.tsx`
 - Base styling and Tailwind import: `src/index.css`
+- 3D scene configuration: `src/components/CinematicScene.tsx`
