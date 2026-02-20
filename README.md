@@ -9,7 +9,7 @@ This portfolio now runs on a modern front-end stack:
 
 The site includes:
 
-- Hero, about, skills, projects, experience, and contact sections
+- Hero, summary, skills, experience, education, certifications, and contact sections
 - Responsive navigation with mobile menu
 - Dark/light mode with persistence
 - Scroll-based active section highlighting
@@ -20,9 +20,12 @@ The site includes:
 The current content is customized using publicly indexed profile details:
 
 - Name: Akshay Engolikar
-- Headline: Data Engineer & Software Developer
-- Core skills: Python, SQL, PySpark, object-oriented programming
+- Headline: Python Developer | Data Engineering | API Automation
+- Core skills: Python, SQL, PySpark, Flask, FastAPI, Airflow, AWS, Azure
 - Location: Dayton, OH
+- Contact:
+  - Phone: `+1 (937) 654-0498`
+  - Email: `akshayengolikar27@gmail.com`
 - Links:
   - LinkedIn: `https://www.linkedin.com/in/akshayengolikar`
   - GitHub: `https://github.com/akshayengolikar`
